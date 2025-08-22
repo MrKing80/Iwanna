@@ -116,6 +116,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Retry"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d2ba8a1-7763-499a-8610-ae28768a3042"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -408,7 +417,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""eb40bb66-4559-4dfa-9a2f-820438abb426"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -547,6 +556,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Horizontal"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68e9bcdf-b9db-4b3c-879b-a636dd8c9068"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Retry"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f343e5c-130a-4249-8878-9296ad6e21a9"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Retry"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1142,6 +1173,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Horizontal = m_Player.FindAction("Horizontal", throwIfNotFound: true);
+        m_Player_Retry = m_Player.FindAction("Retry", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1231,6 +1263,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Horizontal;
+    private readonly InputAction m_Player_Retry;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -1245,6 +1278,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Next => m_Wrapper.m_Player_Next;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Horizontal => m_Wrapper.m_Player_Horizontal;
+        public InputAction @Retry => m_Wrapper.m_Player_Retry;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1284,6 +1318,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Horizontal.started += instance.OnHorizontal;
             @Horizontal.performed += instance.OnHorizontal;
             @Horizontal.canceled += instance.OnHorizontal;
+            @Retry.started += instance.OnRetry;
+            @Retry.performed += instance.OnRetry;
+            @Retry.canceled += instance.OnRetry;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1318,6 +1355,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Horizontal.started -= instance.OnHorizontal;
             @Horizontal.performed -= instance.OnHorizontal;
             @Horizontal.canceled -= instance.OnHorizontal;
+            @Retry.started -= instance.OnRetry;
+            @Retry.performed -= instance.OnRetry;
+            @Retry.canceled -= instance.OnRetry;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1510,6 +1550,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnNext(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnHorizontal(InputAction.CallbackContext context);
+        void OnRetry(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

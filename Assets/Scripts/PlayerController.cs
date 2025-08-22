@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 /// <summary>
 /// プレイヤーの行動を管理するスクリプト
 /// </summary>
@@ -14,24 +14,24 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _playerRigidbody2D = default;
 
     private Vector2 _movement = Vector2.zero;
-    
+
     private int _jumpCount = 0;                     //ジャンプした回数を数える変数
     private const int FRIST_JUMP = 1;               //一回目のジャンプを判定するための数字を格納した定数
     private const int SECOND_JUMP = 2;              //二回目のジャンプを判定するための数字を格納した定数
     private const int EXPONENT = 2;                 //べき指数
     private const int MAX_JUMP_NUMBER = 2;          //最大ジャンプ回数
-    
+
     private float _jumpVelocity = default;          //プレイヤーの計算後のジャンプ速度を格納する変数
     private float _addGravity = 60f;                //重力加速度
     private float _jumpTimer = 0f;                  //時間計測用
     private float _lowerLimitTime = 0.1f;           //ジャンプ経過時間の下限値
     private const float INITIAL_TIMER_VALUE = 0.2f; //タイマーを初期化するときに使用する定数
-    
+
     private bool _isJumpPressed = false;            //ジャンプキーが押されたか
     private bool _keyLock = false;                  //キーロックをしているか
 
     private const string GROUND_TAG = "Floor";      //地面のタグ名
-    
+
     /// <summary>
     /// ジャンプ時のプレイヤーの状態
     /// </summary>   
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
             _isJumpPressed = false;
 
             //現在のステータスが地面に接していない状態か
-            if(_playerStatus != PlayerStatus.GROUND)
+            if (_playerStatus != PlayerStatus.GROUND)
             {
                 //ステータスを落下状態に変更
                 _playerStatus = PlayerStatus.FALLING;
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private float PlayerMove()
     {
-        if(_movement != Vector2.zero)
+        if (_movement != Vector2.zero)
         {
             //移動方向に応じて向きを変える
             transform.localScale = new Vector3(_movement.x, this.transform.localScale.y, this.transform.localScale.z);
@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
         {
             //接地状態に変更
             _playerStatus = PlayerStatus.GROUND;
-            
+
             //各変数を初期化
             _jumpCount = 0;
             _jumpVelocity = 0f;
