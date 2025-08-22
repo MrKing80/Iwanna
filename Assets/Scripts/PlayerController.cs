@@ -148,8 +148,11 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private float PlayerMove()
     {
-        //ˆÚ“®•ûŒü‚É‰‚¶‚ÄŒü‚«‚ğ•Ï‚¦‚é
-        transform.localScale = new Vector3(_movement.x, this.transform.localScale.y, this.transform.localScale.z);
+        if(_movement != Vector2.zero)
+        {
+            //ˆÚ“®•ûŒü‚É‰‚¶‚ÄŒü‚«‚ğ•Ï‚¦‚é
+            transform.localScale = new Vector3(_movement.x, this.transform.localScale.y, this.transform.localScale.z);
+        }
 
         //X²‚Ì‘¬“x‚ğŒvZ‚µA•Ô‚·
         return _moveSpeed * _movement.x;
