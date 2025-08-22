@@ -1,13 +1,16 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 0f;
     [SerializeField] private float _jumpForce = 0f;
+    [SerializeField] private PlayerStatus _playerStatus = PlayerStatus.FALLING;   //プレイヤーのステータスを管理する変数
+    private PlayerInput _playerAction = default;
     private Rigidbody2D _playerRigidbody2D = default;
-    [SerializeField] private PlayerStatus _playerStatus = PlayerStatus.GROUND;   //プレイヤーのステータスを管理する変数
-    private Vector2 _assignmentVec = default;                   //プレイヤーの計算後のジャンプ速度を格納する変数
+    private Vector2 _movement = Vector2.zero;
+    private float _jumpVelocity = default;              //プレイヤーの計算後のジャンプ速度を格納する変数
     private float _addGravity = 60f;                    //重力加速度
     private float _jumpTimer = 0f;                      //時間計測用
     private float _lowerLimitTime = 0.1f;            //ジャンプ経過時間の下限値
@@ -26,14 +29,25 @@ public class PlayerController : MonoBehaviour
         FALLING     //落下状態
     }
 
-    void Start()
+    private void Awake()
+    {
+        _playerAction = new PlayerInput();
+
+        _playerAction.Player.Horizontal.started += OnMove;
+        _playerAction.Player.Horizontal.performed += OnMove;
+        _playerAction.Player.Horizontal.canceled += OnMove;
+
+        _playerAction?.Enable();
+    }
+
+    private void Start()
     {
         _playerRigidbody2D = this.GetComponent<Rigidbody2D>();
     }
-    void Update()
+    private void Update()
     {
         //スペースキーが押されていたら以下の処理
-        if (Input.GetAxisRaw("Jump") > 0f)
+        if (_playerAction.Player.Jump.IsPressed())
         {
             //ジャンプキーが押された状態にする
             _isJumpPressed = !_keyLock;
@@ -48,27 +62,34 @@ public class PlayerController : MonoBehaviour
             _keyLock = false;
         }
 
-        PlayerMove();
-        PlayerJump();
+        SpeedAssignment(PlayerMove(), PlayerJump());
     }
 
-    private void PlayerMove()
+    private void OnDisable()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
+        _playerAction?.Disable();
+    }
 
-        Vector2 moveVelocity = Vector2.zero;
+    /// <summary>
+    /// 移動入力取得
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        _movement = context.ReadValue<Vector2>();
+    }
 
-        moveVelocity.x = _moveSpeed * moveX;
-
-        _playerRigidbody2D.linearVelocity = moveVelocity;
+    private float PlayerMove()
+    {
+       return _moveSpeed * _movement.x;
     }
 
     /// <summary>
     /// プレイヤーのジャンプ処理
     /// </summary>
-    private void PlayerJump()
+    private float PlayerJump()
     {
-        
+
         switch (_playerStatus)
         {
             case PlayerStatus.GROUND:
@@ -83,28 +104,23 @@ public class PlayerController : MonoBehaviour
 
             case PlayerStatus.JUMPING:
 
-                _playerRigidbody2D.linearVelocity = Vector2.zero;
-
                 _jumpTimer += Time.deltaTime;
 
                 //小ジャンプ
                 if (_isJumpPressed || _lowerLimitTime > _jumpTimer)
                 {
-                    _assignmentVec.y = _jumpForce;
-                    _assignmentVec.y -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
+                    _jumpVelocity = _jumpForce;
+                    _jumpVelocity -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
                 }
                 //大ジャンプ
                 else
                 {
                     _jumpTimer += Time.deltaTime;
-                    _assignmentVec.y = _jumpForce;
-                    _assignmentVec.y -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
+                    _jumpVelocity = _jumpForce;
+                    _jumpVelocity -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
                 }
 
                 GroundingJudgment();
-
-                //速度を代入する
-                SpeedAssignment(_assignmentVec);
 
                 break;
 
@@ -115,13 +131,10 @@ public class PlayerController : MonoBehaviour
                 _jumpTimer += Time.deltaTime;
 
                 //y方向の速度をゼロにする
-                _assignmentVec.y = 0f;
+                _jumpVelocity = 0f;
 
                 //y方向の速度を徐々に減らしていく
-                _assignmentVec.y -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
-
-                //速度を代入する
-                SpeedAssignment(_assignmentVec);
+                _jumpVelocity -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
 
                 break;
 
@@ -129,18 +142,19 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+        return _jumpVelocity;
     }
 
     private void GroundingJudgment()
     {
         //ジャンプ状態から落下状態へ移行
-        if (0f > _playerRigidbody2D.linearVelocity.y)
+        if (0f > _playerRigidbody2D.linearVelocityY)
         {
             //ステータスを落下状態に変更
             _playerStatus = PlayerStatus.FALLING;
 
             //y方向の速度をゼロにする
-            _assignmentVec.y = 0f;
+            _jumpVelocity = 0f;
 
             //計測する時間に初期値を代入
             _jumpTimer = INITIAL_TIMER_VALUE;
@@ -148,12 +162,14 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void SpeedAssignment(Vector2 velocity)
+    private void SpeedAssignment(float moveSpeed,float jumpForse)
     {
-        _playerRigidbody2D.linearVelocity = velocity;
+        _playerRigidbody2D.linearVelocity = new Vector2(moveSpeed,jumpForse);
+
+        print(_playerRigidbody2D.linearVelocity);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if (_playerStatus == PlayerStatus.FALLING && collision.gameObject.CompareTag("Floor"))
         {

@@ -1225,7 +1225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 10
   _jumpForce: 5
-  _playerStatus: 0
+  _playerStatus: 2
 --- !u!50 &2114545757
 Rigidbody2D:
   serializedVersion: 5
