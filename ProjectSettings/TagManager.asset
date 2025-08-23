@@ -16,6 +16,7 @@ TagManager:
   - Water
   - Water3
   - Floor
+  - GameOver
   layers:
   - Default
   - TransparentFX

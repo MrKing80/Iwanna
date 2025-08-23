@@ -7,27 +7,31 @@ using UnityEngine.Assertions.Must;
 /// </summary>
 public class PlayerDeath : MonoBehaviour
 {
-    [SerializeField] private GameObject _blood = default;
-    private const int MAX_GENERATE_OBJECTS = 75;
-    private Vector2 _playerPosition = Vector2.zero;
-    private const float MIN_FORCE = 5f;
-    private const float MAX_FORCE = 12.5f;
+    [SerializeField] private GameObject _blood = default;   //死亡時に飛び散るオブジェクト
+    private const int MAX_GENERATE_OBJECTS = 75;            //飛び散るオブジェクトの最大数
+    private Vector2 _playerPosition = Vector2.zero;         //プレイヤーのポジション
+    private const float MIN_FORCE = 5f;                     //オブジェクトを飛ばす最小の力
+    private const float MAX_FORCE = 12.5f;                  //オブジェクトを飛ばす最大の力
     private const string KILLER_TAG = "Killer";     //プレイヤーを殺すオブジェクトのタグ名
     private bool _isDeath = false;                  //死んだかどうか
-    void Start()
+
+    private void Start()
     {
-        
+        _isDeath = false;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        DeathPlayer();
+        if (_isDeath)
+        {
+            DeathPlayer();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //キラーオブジェクトに触れたら
-        if(collision.gameObject.CompareTag(KILLER_TAG))
+        if (collision.gameObject.CompareTag(KILLER_TAG))
         {
             //死亡判定をtrueに変更
             _isDeath = true;
@@ -38,7 +42,7 @@ public class PlayerDeath : MonoBehaviour
     /// カメラ外に出たら処理を行う
     /// </summary>
     private void OnBecameInvisible()
-    {   
+    {
         //死亡判定をtrueに変更
         _isDeath = true;
     }
@@ -48,30 +52,35 @@ public class PlayerDeath : MonoBehaviour
     /// </summary>
     private void DeathPlayer()
     {
-        if (_isDeath)
-        {
-            print("あなたは死にました");
-            GenetateBlood();
-            this.gameObject.SetActive(false);
-        }
+        print("あなたは死にました");
+        GenetateBlood();
+        this.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 死亡時にオブジェクトを飛ばす処理
+    /// </summary>
     private void GenetateBlood()
     {
-        GameObject generatedBlood = default;
+        GameObject generatedBlood = default;    //生成後のオブジェクトを格納する変数
 
+        //オブジェクトを生成する
         for (int i = 0; i < MAX_GENERATE_OBJECTS; i++)
         {
+            //プレイヤーのポジションを格納
             _playerPosition = transform.position;
 
-            generatedBlood = Instantiate(_blood, _playerPosition,Quaternion.identity);
-
+            //オブジェクトを生成
+            generatedBlood = Instantiate(_blood, _playerPosition, Quaternion.identity);
             Rigidbody2D bloodrig2D = generatedBlood.GetComponent<Rigidbody2D>();
 
+            //飛ばす方向をランダムに決める
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
 
-            float randomSpeed = Random.Range(MIN_FORCE,MAX_FORCE);
+            //飛ばすスピードをランダムに決める
+            float randomSpeed = Random.Range(MIN_FORCE, MAX_FORCE);
 
+            //ランダムに決めた値を使ってオブジェクトを飛ばす
             bloodrig2D.AddForce(randomDirection * randomSpeed, ForceMode2D.Impulse);
         }
     }
