@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
                 //初期化
                 _jumpTimer = 0f;
-                _jumpVelocity = 0f;
+                SpeedAssignment(PlayerMove(), 0f);
 
                 //現在のジャンプが1段目か2段目かを判定
                 if (_jumpCount == FRIST_JUMP)
@@ -122,19 +122,6 @@ public class PlayerController : MonoBehaviour
         {
             //ジャンプキーがされていない状態にする
             _isJumpPressed = false;
-
-            //現在のステータスが地面に接していない状態か
-            if (_playerStatus != PlayerStatus.GROUND)
-            {
-                //ステータスを落下状態に変更
-                _playerStatus = PlayerStatus.FALLING;
-
-                //y方向の速度をゼロにする
-                _jumpVelocity = 0f;
-
-                //計測する時間に初期値を代入
-                _jumpTimer = INITIAL_TIMER_VALUE;
-            }
 
             //キーロック解除
             _keyLock = false;
@@ -241,6 +228,27 @@ public class PlayerController : MonoBehaviour
             _jumpVelocity -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
         }
 
+        FallingJugement();
+    }
+
+    /// <summary>
+    /// 落下判定を行う処理
+    /// </summary>
+    private void FallingJugement()
+    {
+        //Y軸の速度が0を下回ったら
+        if(_playerRigidbody2D.linearVelocityY < 0f)
+        {
+            //落下状態に変更
+            _playerStatus = PlayerStatus.FALLING;
+
+            //y方向の速度をゼロにする
+            _jumpVelocity = 0f;
+
+            //計測する時間に初期値を代入
+            _jumpTimer = INITIAL_TIMER_VALUE;
+
+        }
     }
 
     /// <summary>
