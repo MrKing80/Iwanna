@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// ゲームの全体的な管理をするスクリプト
@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;             //インスタンスを保持する変数
+    private Image _gameOverImage = default;
     private PlayerInput _playerAction = default;
 
     private void Awake()
@@ -29,11 +30,15 @@ public class GameManager : MonoBehaviour
         _playerAction = new PlayerInput();
         _playerAction.Enable();
 
+        Transform gameManagerChild = this.gameObject.transform.GetChild(0);
+        Transform gameManagerGrandChild = gameManagerChild.transform.GetChild(0);
+        _gameOverImage = gameManagerGrandChild.GetComponent<Image>();
+
     }
 
     private void Start()
     {
-        
+        _gameOverImage.enabled = false;
     }
 
     private void Update()
@@ -56,6 +61,8 @@ public class GameManager : MonoBehaviour
         {
             //現在のシーンをロード
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            _gameOverImage.enabled = false;
         }
     }
 

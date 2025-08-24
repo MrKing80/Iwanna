@@ -37,7 +37,7 @@ public class PlayerShot : MonoBehaviour
         GameObject newBullet = default;     //新たに生成した銃弾を格納する変数   
 
         //攻撃ボタンが入力されたか
-        if (_playerAction.Player.Attack.IsPressed())
+        if (_playerAction.Player.Attack.WasPressedThisFrame())
         {
             //プレイヤーの位置を参照
             _playerPosition = this.transform.position;

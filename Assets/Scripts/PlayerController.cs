@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput _playerAction = default;
     private Rigidbody2D _playerRigidbody2D = default;
+    private Animator _playerAnimetor = default;
 
     private Vector2 _movement = Vector2.zero;
 
@@ -31,6 +32,9 @@ public class PlayerController : MonoBehaviour
     private bool _keyLock = false;                  //キーロックをしているか
 
     private const string GROUND_TAG = "Floor";      //地面のタグ名
+    private const string RUN_ANIMATION_NAME = "Run";
+    private const string JUMP_ANIMATION_NAME = "Jump";
+    private const string FALL_ANIMATION_NAME = "Fall";
 
     /// <summary>
     /// ジャンプ時のプレイヤーの状態
@@ -60,6 +64,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _playerRigidbody2D = this.GetComponent<Rigidbody2D>();
+        _playerAnimetor = this.GetComponent<Animator>();
     }
     private void Update()
     {
@@ -93,6 +98,7 @@ public class PlayerController : MonoBehaviour
             //ジャンプ回数が最大に達しているか
             if (_jumpCount != MAX_JUMP_NUMBER)
             {
+
                 //ジャンプした回数を増やす
                 _jumpCount++;
 
@@ -137,10 +143,15 @@ public class PlayerController : MonoBehaviour
     {
         if (_movement != Vector2.zero)
         {
+            _playerAnimetor.SetBool(RUN_ANIMATION_NAME, true);
+
             //移動方向に応じて向きを変える
             transform.localScale = new Vector3(_movement.x, this.transform.localScale.y, this.transform.localScale.z);
         }
-
+        else
+        {
+            _playerAnimetor.SetBool(RUN_ANIMATION_NAME, false);
+        }
         //X軸の速度を計算し、返す
         return _moveSpeed * _movement.x;
     }
@@ -205,6 +216,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyJumpPhysics()
     {
+        _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, true);
+
         //タイマーカウント
         _jumpTimer += Time.deltaTime;
 
@@ -237,8 +250,11 @@ public class PlayerController : MonoBehaviour
     private void FallingJugement()
     {
         //Y軸の速度が0を下回ったら
-        if(_playerRigidbody2D.linearVelocityY < 0f)
+        if (_playerRigidbody2D.linearVelocityY < 0f)
         {
+            _playerAnimetor.SetBool(FALL_ANIMATION_NAME, true);
+            _playerAnimetor.SetBool(JUMP_ANIMATION_NAME,false);
+
             //落下状態に変更
             _playerStatus = PlayerStatus.FALLING;
 
@@ -270,6 +286,9 @@ public class PlayerController : MonoBehaviour
         //落下状態かつ接触した相手が地面の場合
         if (_playerStatus == PlayerStatus.FALLING && collision.gameObject.CompareTag(GROUND_TAG))
         {
+            _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
+            _playerAnimetor.SetBool(FALL_ANIMATION_NAME, false);
+
             //接地状態に変更
             _playerStatus = PlayerStatus.GROUND;
 
