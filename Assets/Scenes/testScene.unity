@@ -433,7 +433,7 @@ GameObject:
   - component: {fileID: 723735245}
   - component: {fileID: 723735244}
   - component: {fileID: 723735243}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: test
   m_TagString: Floor
   m_Icon: {fileID: 0}

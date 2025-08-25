@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed = 0f;             //プレイヤーの移動速度
     [SerializeField] private float _jumpForce = 0f;             //プレイヤーのジャンプ力
     [SerializeField] private PlayerStatus _playerStatus = PlayerStatus.FALLING;   //プレイヤーのステータスを管理する変数
+    [SerializeField] private LayerMask _rayCastTargetLayer = default;
 
     private PlayerInput _playerAction = default;
     private Rigidbody2D _playerRigidbody2D = default;
@@ -31,7 +32,6 @@ public class PlayerController : MonoBehaviour
     private bool _isJumpPressed = false;            //ジャンプキーが押されたか
     private bool _keyLock = false;                  //キーロックをしているか
 
-    private const string GROUND_TAG = "Floor";      //地面のタグ名
     private const string RUN_ANIMATION_NAME = "Run";
     private const string JUMP_ANIMATION_NAME = "Jump";
     private const string FALL_ANIMATION_NAME = "Fall";
@@ -116,6 +116,10 @@ public class PlayerController : MonoBehaviour
                     _playerStatus = PlayerStatus.DUBBLE_JUMPING;
                 }
             }
+        }
+        else
+        {
+            GroundJugement();
         }
 
         //スペースキーが押されていたら以下の処理
@@ -277,14 +281,20 @@ public class PlayerController : MonoBehaviour
         _playerRigidbody2D.linearVelocity = new Vector2(moveSpeed, jumpForse);
     }
 
-    /// <summary>
-    /// 地面に接してる間行う処理
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionStay2D(Collision2D collision)
+    private void GroundJugement()
     {
-        //落下状態かつ接触した相手が地面の場合
-        if (_playerStatus == PlayerStatus.FALLING && collision.gameObject.CompareTag(GROUND_TAG))
+        if(_isJumpPressed)
+        {
+            return;
+        }
+
+        float maxRayDistans = 0.15f;                                 // レイの射出距離
+        Ray2D ray = new Ray2D(this.transform.position, Vector2.down);   //レイを飛ばす
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, maxRayDistans, _rayCastTargetLayer);
+        Debug.DrawRay(this.transform.position, Vector3.down * maxRayDistans, Color.red);      // レイを描画する
+
+        // 飛ばしたレイが何かにヒットしているか
+        if (hit.collider)
         {
             _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
             _playerAnimetor.SetBool(FALL_ANIMATION_NAME, false);
@@ -299,6 +309,11 @@ public class PlayerController : MonoBehaviour
 
             //キーをロック
             _keyLock = true;
+        }
+        else if(_playerStatus == PlayerStatus.GROUND)
+        {
+            _playerStatus = PlayerStatus.FALLING;
+            _jumpCount++;
         }
     }
 }

@@ -130,6 +130,9 @@ MonoBehaviour:
   _moveSpeed: 5
   _jumpForce: 7.5
   _playerStatus: 3
+  _rayCastTargetLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &1192132624626086840
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -62,7 +62,6 @@ public class PlayerDeath : MonoBehaviour
     /// </summary>
     private void DeathPlayer()
     {
-        print("‚ ‚È‚½‚ÍŽ€‚É‚Ü‚µ‚½");
         GenetateBlood();
         _gameOverGnerate.GameOverUI();
         this.gameObject.SetActive(false);
