@@ -41,7 +41,7 @@ public class PlayerShot : MonoBehaviour
         {
             //プレイヤーの位置を参照
             _playerPosition = this.transform.position;
-            
+
             //銃弾を生成し、名前を変更
             newBullet = Instantiate(_bullet, _playerPosition, Quaternion.identity);
             newBullet.name = "Injected";

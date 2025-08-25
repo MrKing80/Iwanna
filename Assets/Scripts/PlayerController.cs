@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerAction = default;
     private Rigidbody2D _playerRigidbody2D = default;
     private Animator _playerAnimetor = default;
+    private CapsuleCollider2D _capsuleCollider2D = default;
 
     private Vector2 _movement = Vector2.zero;
 
@@ -27,6 +28,11 @@ public class PlayerController : MonoBehaviour
     private float _addGravity = 60f;                //重力加速度
     private float _jumpTimer = 0f;                  //時間計測用
     private float _lowerLimitTime = 0.1f;           //ジャンプ経過時間の下限値
+    private float _colliderWidth = 0f;
+    private float _colliderHeight = 0f;
+    private float _groundCheckWidthScale = 0.9f;
+    private float _groundCheckHeight = 0.1f;
+    private float _maxRayDistance = 0.15f;                                 // レイの射出距離
     private const float INITIAL_TIMER_VALUE = 0.2f; //タイマーを初期化するときに使用する定数
 
     private bool _isJumpPressed = false;            //ジャンプキーが押されたか
@@ -65,6 +71,10 @@ public class PlayerController : MonoBehaviour
     {
         _playerRigidbody2D = this.GetComponent<Rigidbody2D>();
         _playerAnimetor = this.GetComponent<Animator>();
+        _capsuleCollider2D = this.GetComponent<CapsuleCollider2D>();
+
+        _colliderWidth = _capsuleCollider2D.size.x * transform.localScale.x;
+        _colliderHeight = _capsuleCollider2D.size.y * transform.localScale.y;
     }
     private void Update()
     {
@@ -257,7 +267,7 @@ public class PlayerController : MonoBehaviour
         if (_playerRigidbody2D.linearVelocityY < 0f)
         {
             _playerAnimetor.SetBool(FALL_ANIMATION_NAME, true);
-            _playerAnimetor.SetBool(JUMP_ANIMATION_NAME,false);
+            _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
 
             //落下状態に変更
             _playerStatus = PlayerStatus.FALLING;
@@ -283,15 +293,21 @@ public class PlayerController : MonoBehaviour
 
     private void GroundJugement()
     {
-        if(_isJumpPressed)
+        if (_isJumpPressed)
         {
             return;
         }
 
-        float maxRayDistans = 0.15f;                                 // レイの射出距離
-        Ray2D ray = new Ray2D(this.transform.position, Vector2.down);   //レイを飛ばす
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, maxRayDistans, _rayCastTargetLayer);
-        Debug.DrawRay(this.transform.position, Vector3.down * maxRayDistans, Color.red);      // レイを描画する
+        Vector2 boxSize = new Vector2(_colliderWidth * _groundCheckWidthScale, _groundCheckHeight);
+        RaycastHit2D hit = Physics2D.BoxCast
+                    (
+                        transform.position,   // 中心
+                        boxSize,              // ボックスの大きさ
+                        0f,                   // 角度
+                        Vector2.down,         // 下方向にキャスト
+                        _maxRayDistance,       // 距離
+                        _rayCastTargetLayer   // レイヤー
+                    );
 
         // 飛ばしたレイが何かにヒットしているか
         if (hit.collider)
@@ -310,10 +326,29 @@ public class PlayerController : MonoBehaviour
             //キーをロック
             _keyLock = true;
         }
-        else if(_playerStatus == PlayerStatus.GROUND)
+        else if (_playerStatus == PlayerStatus.GROUND)
         {
             _playerStatus = PlayerStatus.FALLING;
             _jumpCount++;
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        // BoxCast のサイズ（コライダーを元に計算する場合）
+        Vector2 boxSize = new Vector2(_colliderWidth * _groundCheckWidthScale, _groundCheckHeight);
+
+        // キャストの開始位置
+        Vector2 origin = transform.position;
+
+        // キャスト後の位置
+        Vector2 end = origin + Vector2.down * _maxRayDistance;
+
+        // Sceneビューにワイヤーの四角を表示
+        Gizmos.DrawWireCube(origin, boxSize); // 開始地点
+        Gizmos.DrawWireCube(end, boxSize);    // キャスト後の位置
+    }
+
 }
