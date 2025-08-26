@@ -28,12 +28,12 @@ public class PlayerController : MonoBehaviour
     private float _addGravity = 60f;                //重力加速度
     private float _jumpTimer = 0f;                  //時間計測用
     private float _lowerLimitTime = 0.1f;           //ジャンプ経過時間の下限値
+    private float _fallSpeed = 5f;
     private float _colliderWidth = 0f;
     private float _colliderHeight = 0f;
     private float _groundCheckWidthScale = 0.9f;
     private float _groundCheckHeight = 0.1f;
     private float _maxRayDistance = 0.15f;                                 // レイの射出距離
-    private const float INITIAL_TIMER_VALUE = 0.2f; //タイマーを初期化するときに使用する定数
 
     private bool _isJumpPressed = false;            //ジャンプキーが押されたか
     private bool _keyLock = false;                  //キーロックをしているか
@@ -206,14 +206,11 @@ public class PlayerController : MonoBehaviour
             //落下状態
             case PlayerStatus.FALLING:
 
-                //時間を計測
-                _jumpTimer += Time.deltaTime;
-
                 //y方向の速度をゼロにする
                 _jumpVelocity = 0f;
 
                 //y方向の速度を徐々に減らしていく
-                _jumpVelocity -= _addGravity * Mathf.Pow(_jumpTimer, EXPONENT);
+                _jumpVelocity -= _fallSpeed;
 
                 break;
 
@@ -274,9 +271,6 @@ public class PlayerController : MonoBehaviour
 
             //y方向の速度をゼロにする
             _jumpVelocity = 0f;
-
-            //計測する時間に初期値を代入
-            _jumpTimer = INITIAL_TIMER_VALUE;
 
         }
     }

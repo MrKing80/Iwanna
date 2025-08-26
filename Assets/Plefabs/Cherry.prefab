@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8562962826128702957}
   - component: {fileID: 2701754476080997659}
   - component: {fileID: 8189442140017712176}
-  - component: {fileID: 8181433989628932106}
-  m_Layer: 0
+  - component: {fileID: 7325021652138745706}
+  m_Layer: 9
   m_Name: Cherry
   m_TagString: Killer
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6594219022869216680}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.0087271, y: -1.2054942, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -119,13 +119,13 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.1875
---- !u!50 &8181433989628932106
+--- !u!50 &7325021652138745706
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -133,7 +133,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6594219022869216680}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -151,4 +151,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4

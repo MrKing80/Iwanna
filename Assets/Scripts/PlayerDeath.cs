@@ -48,6 +48,16 @@ public class PlayerDeath : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //キラーオブジェクトに触れたら
+        if (collision.gameObject.CompareTag(KILLER_TAG))
+        {
+            //死亡判定をtrueに変更
+            _isDeath = true;
+        }
+    }
+
     /// <summary>
     /// カメラ外に出たら処理を行う
     /// </summary>

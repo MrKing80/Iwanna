@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3494040594684249889}
   - component: {fileID: 5454170608263574165}
-  m_Layer: 0
+  - component: {fileID: -833470600657261070}
+  m_Layer: 6
   m_Name: KiilerEvent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,9 +63,26 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.3
+--- !u!114 &-833470600657261070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5165487188027861315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48df6fce5f2bc64419bfa648ac7a95ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _killers: []
+  _trapType: 0
+  _injectionspeed: 0
+  _moveSpeed: 0
+  _moveEndPoint: {x: 0, y: 0}
