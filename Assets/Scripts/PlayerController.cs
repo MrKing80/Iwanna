@@ -78,6 +78,11 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        if(SceneManager.GetActiveScene().name == "TitleScene")
+        {
+            return;
+        }
+
         OnJumping();
         SpeedAssignment(PlayerMove(), PlayerJump());
     }

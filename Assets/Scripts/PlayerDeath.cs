@@ -21,8 +21,12 @@ public class PlayerDeath : MonoBehaviour
     private void Awake()
     {
         _gameOverManager = GameObject.FindGameObjectWithTag(GAMEOVER_TAG);
+        
+        if( _gameOverManager != null )
+        {
+            _gameOverGnerate = _gameOverManager.GetComponent<GameOverGenerate>();
 
-        _gameOverGnerate = _gameOverManager.GetComponent<GameOverGenerate>();
+        }
     }
 
     private void Start()
