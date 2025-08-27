@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name == "TitleScene")
+        if(SceneManager.GetActiveScene().name == "TitleScene" || Time.timeScale == 0)
         {
             return;
         }

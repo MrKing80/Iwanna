@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        Time.timeScale = 1;
+
         _playerAction = new PlayerInput();
         _playerAction.Enable();
 
