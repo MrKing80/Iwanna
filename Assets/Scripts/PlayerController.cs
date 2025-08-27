@@ -211,6 +211,9 @@ public class PlayerController : MonoBehaviour
             //—‰ºó‘Ô
             case PlayerStatus.FALLING:
 
+                _playerAnimetor.SetBool(FALL_ANIMATION_NAME, true);
+                _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
+
                 //y•ûŒü‚Ì‘¬“x‚ğƒ[ƒ‚É‚·‚é
                 _jumpVelocity = 0f;
 
@@ -268,9 +271,6 @@ public class PlayerController : MonoBehaviour
         //Y²‚Ì‘¬“x‚ª0‚ğ‰º‰ñ‚Á‚½‚ç
         if (_playerRigidbody2D.linearVelocityY < 0f)
         {
-            _playerAnimetor.SetBool(FALL_ANIMATION_NAME, true);
-            _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
-
             //—‰ºó‘Ô‚É•ÏX
             _playerStatus = PlayerStatus.FALLING;
 

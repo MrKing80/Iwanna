@@ -5026,7 +5026,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1549105135}
     m_Modifications:
     - target: {fileID: -833470600657261070, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: _trapType
@@ -5070,15 +5070,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5095,6 +5095,14 @@ PrefabInstance:
     - target: {fileID: 5165487188027861315, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_Name
       value: KiilerEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454170608263574165, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+      propertyPath: m_Radius
+      value: 0.3558971
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454170608263574165, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.055897087
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5554,6 +5562,7 @@ Transform:
   - {fileID: 401157310}
   - {fileID: 381271057}
   - {fileID: 1966346491}
+  - {fileID: 2137923289}
   - {fileID: 1145962122}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6162,11 +6171,11 @@ PrefabInstance:
       objectReference: {fileID: 348876693}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.1280513
+      value: 4.291
       objectReference: {fileID: 0}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.58
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6203,6 +6212,22 @@ PrefabInstance:
     - target: {fileID: 5165487188027861315, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
       propertyPath: m_Name
       value: KiilerEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165487188027861315, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454170608263574165, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+      propertyPath: m_Radius
+      value: 0.34477186
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454170608263574165, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454170608263574165, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6480,6 +6505,11 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!4 &2137923289 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3494040594684249889, guid: 1e1ab61e6a1d51444a3084f09dd7366f, type: 3}
+  m_PrefabInstance: {fileID: 1225734943}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &1465975179441917756
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6915,11 +6945,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2490991991457079159, guid: 14bcf01f30806974b9399b8ed3412c4b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.5
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 2490991991457079159, guid: 14bcf01f30806974b9399b8ed3412c4b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 2490991991457079159, guid: 14bcf01f30806974b9399b8ed3412c4b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6970,4 +7000,3 @@ SceneRoots:
   - {fileID: 1356956825}
   - {fileID: 1549105135}
   - {fileID: 130721046}
-  - {fileID: 1225734943}
