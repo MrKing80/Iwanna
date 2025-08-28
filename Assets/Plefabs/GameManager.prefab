@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 1064584982664579338}
   m_Layer: 0
   m_Name: SaveManager
-  m_TagString: GameController
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

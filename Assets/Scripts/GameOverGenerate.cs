@@ -9,17 +9,4 @@ public class GameOverGenerate : MonoBehaviour
     {
         _gameOverImage.enabled = true;
     }
-
-    private void Update()
-    {
-        if (_gameOverImage != null)
-        {
-            print("イメージあるよ : " + _gameOverImage);
-        }
-        else
-        {
-            print("イメージないよ : " + _gameOverImage);
-        }
-
-    }
 }

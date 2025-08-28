@@ -19,7 +19,12 @@ public class KillerEventController : MonoBehaviour
     [SerializeField, Header("トラップが移動する際の終点")]
     private Vector2 _moveEndPoint = Vector2.zero;
 
+    [SerializeField, Header("トラップの効果音")]
+    private AudioClip _killerSound = default;
+
     private Rigidbody2D[] _trapRigidbodys = default;
+    private AudioSource _audioSource = default;
+    private CircleCollider2D _collider2D = default;
     private Vector2 _myPosition = Vector2.zero;
     private bool _isTrapMoving = false;
 
@@ -34,6 +39,9 @@ public class KillerEventController : MonoBehaviour
 
     private void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
+        _collider2D = GetComponent<CircleCollider2D>();
+
         _trapRigidbodys = new Rigidbody2D[_killers.Length];
 
         for (int i = 0; i < _killers.Length; i++)
@@ -55,13 +63,19 @@ public class KillerEventController : MonoBehaviour
         {
             case TrapType.Pitfall:
 
+                _audioSource.PlayOneShot(_killerSound);
+
                 for (int i = 0; i < _killers.Length; i++)
                 {
                     _killers[i].gameObject.SetActive(false);
                 }
 
+                _collider2D.enabled = false;
+
                 break;
             case TrapType.FallingObjects:
+
+                _audioSource.PlayOneShot(_killerSound);
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -72,8 +86,12 @@ public class KillerEventController : MonoBehaviour
                     _trapRigidbodys[i].linearVelocity = Vector2.down * _injectionspeed;
                 }
 
+                _collider2D.enabled = false;
+
                 break;
             case TrapType.JumpOutObjects:
+
+                _audioSource.PlayOneShot(_killerSound);
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -84,9 +102,13 @@ public class KillerEventController : MonoBehaviour
                     _trapRigidbodys[i].linearVelocity = Vector2.up * _injectionspeed;
                 }
 
+                _collider2D.enabled = false;
+
                 break;
 
             case TrapType.TowardsThePlayer:
+
+                _audioSource.PlayOneShot(_killerSound);
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -97,11 +119,17 @@ public class KillerEventController : MonoBehaviour
                     _trapRigidbodys[i].linearVelocity = -_myPosition * _injectionspeed;
                 }
 
+                _collider2D.enabled = false;
+
                 break;
 
             case TrapType.MoveObjects:
 
+                _audioSource.PlayOneShot(_killerSound);
+
                 _isTrapMoving = true;
+
+                _collider2D.enabled = false;
 
                 break;
             default:

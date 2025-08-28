@@ -10,11 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jumpForce = 0f;             //プレイヤーのジャンプ力
     [SerializeField] private PlayerStatus _playerStatus = PlayerStatus.FALLING;   //プレイヤーのステータスを管理する変数
     [SerializeField] private LayerMask _rayCastTargetLayer = default;
-
+    [SerializeField] private AudioClip[] _jumpSound = default;
     private PlayerInput _playerAction = default;
     private Rigidbody2D _playerRigidbody2D = default;
     private Animator _playerAnimetor = default;
-    private CapsuleCollider2D _capsuleCollider2D = default;
+    private AudioSource _playerAudioSource = default;
+    private BoxCollider2D _boxCollider2D = default;
 
     private Vector2 _movement = Vector2.zero;
 
@@ -72,10 +73,11 @@ public class PlayerController : MonoBehaviour
     {
         _playerRigidbody2D = this.GetComponent<Rigidbody2D>();
         _playerAnimetor = this.GetComponent<Animator>();
-        _capsuleCollider2D = this.GetComponent<CapsuleCollider2D>();
+        _playerAudioSource = this.GetComponent<AudioSource>();
+        _boxCollider2D = this.GetComponent<BoxCollider2D>();
 
-        _colliderWidth = _capsuleCollider2D.size.x * transform.localScale.x;
-        _colliderHeight = _capsuleCollider2D.size.y * transform.localScale.y;
+        _colliderWidth = _boxCollider2D.size.x * transform.localScale.x;
+        _colliderHeight = _boxCollider2D.size.y * transform.localScale.y;
     }
     private void Update()
     {
@@ -125,10 +127,12 @@ public class PlayerController : MonoBehaviour
                 //現在のジャンプが1段目か2段目かを判定
                 if (_jumpCount == FRIST_JUMP)
                 {
+                    _playerAudioSource.PlayOneShot(_jumpSound[_jumpCount - 1]);
                     _playerStatus = PlayerStatus.JUMPING;
                 }
                 else if (_jumpCount == SECOND_JUMP)
                 {
+                    _playerAudioSource.PlayOneShot(_jumpSound[_jumpCount - 1]);
                     _playerStatus = PlayerStatus.DUBBLE_JUMPING;
                 }
             }

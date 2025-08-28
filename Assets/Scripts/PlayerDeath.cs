@@ -8,6 +8,7 @@ using UnityEngine.Assertions.Must;
 public class PlayerDeath : MonoBehaviour
 {
     [SerializeField] private GameObject _blood = default;       //死亡時に飛び散るオブジェクト
+    [SerializeField] private GameObject _soundGenerater = default;       //死亡時に飛び散るオブジェクト
     private GameOverGenerate _gameOverGnerate = default;
     private GameObject _gameManager = default;
     private const int MAX_GENERATE_OBJECTS = 40;                //飛び散るオブジェクトの最大数
@@ -33,15 +34,6 @@ public class PlayerDeath : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_gameManager != null)
-        {
-            print("参照あるよ : " + _gameManager);
-        }
-        else
-        {
-            print("参照ないよ");
-        }
-
         if (_isDeath)
         {
             DeathPlayer();
@@ -82,9 +74,11 @@ public class PlayerDeath : MonoBehaviour
     /// </summary>
     private void DeathPlayer()
     {
+        Instantiate(_soundGenerater);
+
         GenetateBlood();
 
-        if(_gameOverGnerate != null)
+        if (_gameOverGnerate != null)
         {
             _gameOverGnerate.GameOverUI();
         }

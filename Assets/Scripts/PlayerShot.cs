@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerShot : MonoBehaviour
 {
     [SerializeField] private GameObject _bullet = default;  //銃弾オブジェクト
+    [SerializeField] private AudioClip _shotSound = default;
+    private AudioSource _shotSoundSource = default;
     private PlayerInput _playerAction = default;
     private BulletController _bulletStatus = default;
     private Vector2 _playerPosition = Vector2.zero;         //プレイヤーのポジション
@@ -18,6 +20,10 @@ public class PlayerShot : MonoBehaviour
         _playerAction.Enable();
     }
 
+    private void Start()
+    {
+        _shotSoundSource = this.GetComponent<AudioSource>();
+    }
     private void Update()
     {
         if(Time.timeScale == 0)
@@ -39,11 +45,14 @@ public class PlayerShot : MonoBehaviour
     /// </summary>
     private void PlayerShooting()
     {
+
         GameObject newBullet = default;     //新たに生成した銃弾を格納する変数   
 
         //攻撃ボタンが入力されたか
         if (_playerAction.Player.Attack.WasPressedThisFrame())
         {
+            _shotSoundSource.PlayOneShot(_shotSound);
+
             //プレイヤーの位置を参照
             _playerPosition = this.transform.position;
 
