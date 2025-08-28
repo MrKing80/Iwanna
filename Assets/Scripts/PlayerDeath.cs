@@ -10,7 +10,7 @@ public class PlayerDeath : MonoBehaviour
     [SerializeField] private GameObject _blood = default;       //死亡時に飛び散るオブジェクト
     private GameOverGenerate _gameOverGnerate = default;
     private GameObject _gameManager = default;
-    private const int MAX_GENERATE_OBJECTS = 75;                //飛び散るオブジェクトの最大数
+    private const int MAX_GENERATE_OBJECTS = 40;                //飛び散るオブジェクトの最大数
     private Vector2 _playerPosition = Vector2.zero;             //プレイヤーのポジション
     private const float MIN_FORCE = 5f;                         //オブジェクトを飛ばす最小の力
     private const float MAX_FORCE = 12.5f;                      //オブジェクトを飛ばす最大の力
@@ -36,6 +36,15 @@ public class PlayerDeath : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_gameOverGnerate != null)
+        {
+            print("参照あるよ : " + _gameOverGnerate);
+        }
+        else
+        {
+            print("参照ないよ : " + _gameOverGnerate);
+        }
+
         if (_isDeath)
         {
             DeathPlayer();
@@ -77,7 +86,12 @@ public class PlayerDeath : MonoBehaviour
     private void DeathPlayer()
     {
         GenetateBlood();
-        _gameOverGnerate.GameOverUI();
+
+        if(_gameOverGnerate != null)
+        {
+            _gameOverGnerate.GameOverUI();
+        }
+
         this.gameObject.SetActive(false);
     }
 

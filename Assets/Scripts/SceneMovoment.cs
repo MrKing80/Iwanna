@@ -34,7 +34,11 @@ public class SceneMovoment : MonoBehaviour
         {
             if (_currentSceneName == TITLE_SCENE_NAME)
             {
-                SaveManager._saveManagerInstance.SavePoint = Vector2.zero;
+                if (SaveManager._saveManagerInstance != null)
+                {
+                    SaveManager._saveManagerInstance.SavePoint = Vector2.zero;
+                }
+
                 SceneManager.LoadScene(STAGE_SCENE_NAME);
             }
             else
