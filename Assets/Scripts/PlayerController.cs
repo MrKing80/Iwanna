@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
 
         //InputAction‚ð—LŒø‰»
         _playerAction?.Enable();
+
     }
 
     private void Start()

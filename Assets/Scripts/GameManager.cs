@@ -7,16 +7,16 @@ using UnityEngine.UI;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;             //インスタンスを保持する変数
+    public static GameManager _gameManagerInstance;             //インスタンスを保持する変数
     private Image _gameOverImage = default;
     private PlayerInput _playerAction = default;
 
     private void Awake()
     {
         // インスタンスがまだ存在しない場合、自分自身をインスタンスとする
-        if (instance == null)
+        if (_gameManagerInstance == null)
         {
-            instance = this;
+            _gameManagerInstance = this;
             
             // 他のシーンに移動してもシングルトンを破棄しない
             DontDestroyOnLoad(gameObject);

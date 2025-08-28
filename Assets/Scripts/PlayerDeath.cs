@@ -7,24 +7,24 @@ using UnityEngine.Assertions.Must;
 /// </summary>
 public class PlayerDeath : MonoBehaviour
 {
-    [SerializeField] private GameObject _blood = default;   //死亡時に飛び散るオブジェクト
+    [SerializeField] private GameObject _blood = default;       //死亡時に飛び散るオブジェクト
     private GameOverGenerate _gameOverGnerate = default;
-    private GameObject _gameOverManager = default;
-    private const int MAX_GENERATE_OBJECTS = 75;            //飛び散るオブジェクトの最大数
-    private Vector2 _playerPosition = Vector2.zero;         //プレイヤーのポジション
-    private const float MIN_FORCE = 5f;                     //オブジェクトを飛ばす最小の力
-    private const float MAX_FORCE = 12.5f;                  //オブジェクトを飛ばす最大の力
-    private const string KILLER_TAG = "Killer";     //プレイヤーを殺すオブジェクトのタグ名
-    private const string GAMEOVER_TAG = "GameController";
-    private bool _isDeath = false;                  //死んだかどうか
+    private GameObject _gameManager = default;
+    private const int MAX_GENERATE_OBJECTS = 75;                //飛び散るオブジェクトの最大数
+    private Vector2 _playerPosition = Vector2.zero;             //プレイヤーのポジション
+    private const float MIN_FORCE = 5f;                         //オブジェクトを飛ばす最小の力
+    private const float MAX_FORCE = 12.5f;                      //オブジェクトを飛ばす最大の力
+    private const string KILLER_TAG = "Killer";                 //プレイヤーを殺すオブジェクトのタグ名
+    private const string GAMEMANAGER_TAG = "GameController";    //ゲームマネージャーのタグ名
+    private bool _isDeath = false;                              //死んだかどうか
 
     private void Awake()
     {
-        _gameOverManager = GameObject.FindGameObjectWithTag(GAMEOVER_TAG);
+        _gameManager = GameObject.FindGameObjectWithTag(GAMEMANAGER_TAG);
         
-        if( _gameOverManager != null )
+        if( _gameManager != null )
         {
-            _gameOverGnerate = _gameOverManager.GetComponent<GameOverGenerate>();
+            _gameOverGnerate = _gameManager.GetComponent<GameOverGenerate>();
 
         }
     }
