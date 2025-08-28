@@ -18,31 +18,28 @@ public class PlayerDeath : MonoBehaviour
     private const string GAMEMANAGER_TAG = "GameController";    //ゲームマネージャーのタグ名
     private bool _isDeath = false;                              //死んだかどうか
 
-    private void Awake()
+    private void Start()
     {
         _gameManager = GameObject.FindGameObjectWithTag(GAMEMANAGER_TAG);
-        
-        if( _gameManager != null )
+
+        if (_gameManager != null)
         {
             _gameOverGnerate = _gameManager.GetComponent<GameOverGenerate>();
 
         }
-    }
 
-    private void Start()
-    {
         _isDeath = false;
     }
 
     private void FixedUpdate()
     {
-        if (_gameOverGnerate != null)
+        if (_gameManager != null)
         {
-            print("参照あるよ : " + _gameOverGnerate);
+            print("参照あるよ : " + _gameManager);
         }
         else
         {
-            print("参照ないよ : " + _gameOverGnerate);
+            print("参照ないよ");
         }
 
         if (_isDeath)
