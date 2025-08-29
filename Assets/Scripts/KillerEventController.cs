@@ -26,6 +26,7 @@ public class KillerEventController : MonoBehaviour
     private AudioSource _audioSource = default;
     private CircleCollider2D _collider2D = default;
     private Vector2 _myPosition = Vector2.zero;
+    private Vector2 _playerPosition = Vector2.zero;
     private bool _isTrapMoving = false;
 
     private enum TrapType
@@ -60,6 +61,8 @@ public class KillerEventController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        _playerPosition = collision.transform.position;
+
         switch (_trapType)
         {
             case TrapType.Pitfall:
@@ -129,7 +132,9 @@ public class KillerEventController : MonoBehaviour
 
                     _trapRigidbodys[i].bodyType = RigidbodyType2D.Dynamic;
 
-                    _trapRigidbodys[i].linearVelocity = -_myPosition * _injectionspeed;
+                    Vector2 direction = (_playerPosition - _myPosition).normalized;
+
+                    _trapRigidbodys[i].linearVelocity = direction * _injectionspeed;
                 }
 
                 _collider2D.enabled = false;
