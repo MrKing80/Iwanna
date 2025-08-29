@@ -34,6 +34,7 @@ public class KillerEventController : MonoBehaviour
         FallingObjects,     //オブジェクトが落下してくる
         JumpOutObjects,     //オブジェクトが飛来してくる
         MoveObjects,        //オブジェクトが移動する
+        ParallelTranslation, //オブジェクトが平行移動する
         TowardsThePlayer    //プレイヤーを狙って飛んでくる
     }
 
@@ -63,7 +64,10 @@ public class KillerEventController : MonoBehaviour
         {
             case TrapType.Pitfall:
 
-                _audioSource.PlayOneShot(_killerSound);
+                if (_killerSound != null)
+                {
+                    _audioSource.PlayOneShot(_killerSound);
+                }
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -75,7 +79,10 @@ public class KillerEventController : MonoBehaviour
                 break;
             case TrapType.FallingObjects:
 
-                _audioSource.PlayOneShot(_killerSound);
+                if (_killerSound != null)
+                {
+                    _audioSource.PlayOneShot(_killerSound);
+                }
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -91,7 +98,10 @@ public class KillerEventController : MonoBehaviour
                 break;
             case TrapType.JumpOutObjects:
 
-                _audioSource.PlayOneShot(_killerSound);
+                if (_killerSound != null)
+                {
+                    _audioSource.PlayOneShot(_killerSound);
+                }
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -108,7 +118,10 @@ public class KillerEventController : MonoBehaviour
 
             case TrapType.TowardsThePlayer:
 
-                _audioSource.PlayOneShot(_killerSound);
+                if (_killerSound != null)
+                {
+                    _audioSource.PlayOneShot(_killerSound);
+                }
 
                 for (int i = 0; i < _killers.Length; i++)
                 {
@@ -125,7 +138,22 @@ public class KillerEventController : MonoBehaviour
 
             case TrapType.MoveObjects:
 
-                _audioSource.PlayOneShot(_killerSound);
+                if (_killerSound != null)
+                {
+                    _audioSource.PlayOneShot(_killerSound);
+                }
+
+                _isTrapMoving = true;
+
+                _collider2D.enabled = false;
+
+                break;
+            case TrapType.ParallelTranslation:
+
+                if (_killerSound != null)
+                {
+                    _audioSource.PlayOneShot(_killerSound);
+                }
 
                 _isTrapMoving = true;
 
@@ -141,14 +169,38 @@ public class KillerEventController : MonoBehaviour
     {
         for (int i = 0; i < _killers.Length; i++)
         {
-            _killers[i].transform.position =
-                    Vector2.MoveTowards(_killers[i].transform.position, _moveEndPoint, _moveSpeed * Time.deltaTime);
-
-            if ((Vector2)_killers[i].transform.position == _moveEndPoint)
+            if (_trapType == TrapType.MoveObjects)
             {
-                _isTrapMoving = false;
+                _killers[i].transform.position = Vector2.MoveTowards
+                    (
+                    _killers[i].transform.position,
+                    _moveEndPoint,
+                    _moveSpeed * Time.deltaTime
+                    );
+
+                if ((Vector2)_killers[i].transform.position == _moveEndPoint)
+                {
+                    _isTrapMoving = false;
+                }
             }
+            else if (_trapType == TrapType.ParallelTranslation)
+            {
+                _killers[i].transform.position = Vector2.MoveTowards
+                    (
+                    _killers[i].transform.position,
+                    new Vector2(_moveEndPoint.x, _killers[i].transform.position.y),
+                    _moveSpeed * Time.deltaTime
+                    );
+
+                if (_killers[i].transform.position.x == _moveEndPoint.x)
+                {
+                    _isTrapMoving = false;
+                }
+
+            }
+
         }
+
     }
 
     private void OnBecameInvisible()
