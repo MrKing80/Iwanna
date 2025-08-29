@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D _boxCollider2D = default;
 
     private Vector2 _movement = Vector2.zero;
+    private Vector2 _boxSize = Vector2.zero;
 
     private int _jumpCount = 0;                     //ジャンプした回数を数える変数
     private const int FRIST_JUMP = 1;               //一回目のジャンプを判定するための数字を格納した定数
@@ -78,10 +79,12 @@ public class PlayerController : MonoBehaviour
 
         _colliderWidth = _boxCollider2D.size.x * transform.localScale.x;
         _colliderHeight = _boxCollider2D.size.y * transform.localScale.y;
+
+        _boxSize = new Vector2(_colliderWidth * _groundCheckWidthScale, _groundCheckHeight);
     }
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name == "TitleScene" || Time.timeScale == 0)
+        if (SceneManager.GetActiveScene().name == "TitleScene" || Time.timeScale == 0)
         {
             return;
         }
@@ -147,6 +150,8 @@ public class PlayerController : MonoBehaviour
         {
             //ジャンプキーが押された状態にする
             _isJumpPressed = !_keyLock;
+
+            CeilingJudgment();
         }
         else
         {
@@ -302,11 +307,10 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        Vector2 boxSize = new Vector2(_colliderWidth * _groundCheckWidthScale, _groundCheckHeight);
-        RaycastHit2D hit = Physics2D.BoxCast
+        RaycastHit2D hitDown = Physics2D.BoxCast
                     (
                         transform.position,   // 中心
-                        boxSize,              // ボックスの大きさ
+                        _boxSize,              // ボックスの大きさ
                         0f,                   // 角度
                         Vector2.down,         // 下方向にキャスト
                         _maxRayDistance,       // 距離
@@ -314,7 +318,7 @@ public class PlayerController : MonoBehaviour
                     );
 
         // 飛ばしたレイが何かにヒットしているか
-        if (hit.collider)
+        if (hitDown.collider)
         {
             _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
             _playerAnimetor.SetBool(FALL_ANIMATION_NAME, false);
@@ -337,22 +341,53 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void CeilingJudgment()
+    {
+        RaycastHit2D hitUp = Physics2D.BoxCast
+            (
+                transform.position,   // 中心
+                _boxSize,              // ボックスの大きさ
+                0f,                   // 角度
+                Vector2.up,         // 下方向にキャスト
+                _maxRayDistance,       // 距離
+                _rayCastTargetLayer   // レイヤー
+            );
+
+        // 飛ばしたレイが何かにヒットしているか
+        if (hitUp.collider)
+        {
+            _playerAnimetor.SetBool(JUMP_ANIMATION_NAME, false);
+            _playerAnimetor.SetBool(FALL_ANIMATION_NAME, true);
+
+            //接地状態に変更
+            _playerStatus = PlayerStatus.FALLING;
+
+            //各変数を初期化
+            _jumpVelocity = 0f;
+            _jumpTimer = 0f;
+
+            //キーをロック
+            _keyLock = true;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
 
         // BoxCast のサイズ（コライダーを元に計算する場合）
-        Vector2 boxSize = new Vector2(_colliderWidth * _groundCheckWidthScale, _groundCheckHeight);
+        Vector2 _boxSize = new Vector2(_colliderWidth * _groundCheckWidthScale, _groundCheckHeight);
 
         // キャストの開始位置
         Vector2 origin = transform.position;
 
         // キャスト後の位置
-        Vector2 end = origin + Vector2.down * _maxRayDistance;
+        Vector2 endDown = origin + Vector2.down * _maxRayDistance;
+        Vector2 endUp = origin + Vector2.up * _maxRayDistance;
 
         // Sceneビューにワイヤーの四角を表示
-        Gizmos.DrawWireCube(origin, boxSize); // 開始地点
-        Gizmos.DrawWireCube(end, boxSize);    // キャスト後の位置
+        Gizmos.DrawWireCube(endUp, _boxSize); // 開始地点
+        Gizmos.DrawWireCube(endDown, _boxSize);    // キャスト後の位置
     }
 
 }
