@@ -21,13 +21,11 @@ public class SceneMovoment : MonoBehaviour
         _currentSceneName = SceneManager.GetActiveScene().name;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void OnDisable()
     {
         _playerAction.Disable();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_playerAction.Player.Attack.WasPressedThisFrame())

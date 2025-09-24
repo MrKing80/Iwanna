@@ -4,29 +4,38 @@ using UnityEngine.Assertions.Must;
 
 /// <summary>
 /// プレイヤーの死亡処理を行うスクリプト
+/// ・トラップや画面外に落ちたときに死亡判定
+/// ・血しぶきエフェクト生成
+/// ・効果音再生
+/// ・GameOverUI表示
+/// ・プレイヤー本体を非アクティブ化
 /// </summary>
 public class PlayerDeath : MonoBehaviour
 {
-    [SerializeField] private GameObject _blood = default;       //死亡時に飛び散るオブジェクト
-    [SerializeField] private GameObject _soundGenerater = default;       //死亡時に飛び散るオブジェクト
-    private GameOverGenerate _gameOverGnerate = default;
-    private GameObject _gameManager = default;
-    private const int MAX_GENERATE_OBJECTS = 40;                //飛び散るオブジェクトの最大数
-    private Vector2 _playerPosition = Vector2.zero;             //プレイヤーのポジション
-    private const float MIN_FORCE = 5f;                         //オブジェクトを飛ばす最小の力
-    private const float MAX_FORCE = 12.5f;                      //オブジェクトを飛ばす最大の力
-    private const string KILLER_TAG = "Killer";                 //プレイヤーを殺すオブジェクトのタグ名
-    private const string GAMEMANAGER_TAG = "GameController";    //ゲームマネージャーのタグ名
-    private bool _isDeath = false;                              //死んだかどうか
+    [SerializeField] private GameObject _blood = default;          // 死亡時に飛び散るオブジェクト（血しぶき）
+    [SerializeField] private GameObject _soundGenerater = default; // 死亡時に再生するサウンド生成用オブジェクト
+
+    private GameOverGenerate _gameOverGnerate = default;           // GameOverUI制御用
+    private GameObject _gameManager = default;                     // GameManager参照用
+
+    private const int MAX_GENERATE_OBJECTS = 40;                    // 血しぶきを生成する数
+    private Vector2 _playerPosition = Vector2.zero;                 // プレイヤーの現在位置
+    private const float MIN_FORCE = 5f;                             // 血しぶきの最小飛散力
+    private const float MAX_FORCE = 12.5f;                          // 血しぶきの最大飛散力
+
+    private const string KILLER_TAG = "Killer";                     // プレイヤーを殺すオブジェクトのタグ
+    private const string GAMEMANAGER_TAG = "GameController";        // GameManagerを探すためのタグ
+
+    private bool _isDeath = false;                                  // プレイヤーが死亡しているかどうか
 
     private void Start()
     {
+        // GameManagerをタグから検索し、GameOverUIを扱えるようにする
         _gameManager = GameObject.FindGameObjectWithTag(GAMEMANAGER_TAG);
 
         if (_gameManager != null)
         {
             _gameOverGnerate = _gameManager.GetComponent<GameOverGenerate>();
-
         }
 
         _isDeath = false;
@@ -34,6 +43,7 @@ public class PlayerDeath : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // 死亡フラグが立っていたら死亡処理を実行
         if (_isDeath)
         {
             DeathPlayer();
@@ -42,74 +52,75 @@ public class PlayerDeath : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //キラーオブジェクトに触れたら
+        // 「Killer」タグのオブジェクトに触れたら死亡
         if (collision.gameObject.CompareTag(KILLER_TAG))
         {
-            //死亡判定をtrueに変更
             _isDeath = true;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //キラーオブジェクトに触れたら
+        // 「Killer」タグのオブジェクトに触れたら死亡
         if (collision.gameObject.CompareTag(KILLER_TAG))
         {
-            //死亡判定をtrueに変更
             _isDeath = true;
         }
     }
 
     /// <summary>
-    /// カメラ外に出たら処理を行う
+    /// カメラ外に出た場合も死亡扱い
+    /// （落下死などに対応）
     /// </summary>
     private void OnBecameInvisible()
     {
-        //死亡判定をtrueに変更
         _isDeath = true;
     }
 
     /// <summary>
-    /// 死亡したときの処理を行う
+    /// プレイヤー死亡時の一連の処理
     /// </summary>
     private void DeathPlayer()
     {
+        // サウンド再生用オブジェクトを生成
         Instantiate(_soundGenerater);
 
+        // 血しぶきをランダムに飛ばす
         GenetateBlood();
 
+        // GameOverUIを表示
         if (_gameOverGnerate != null)
         {
             _gameOverGnerate.GameOverUI();
         }
 
+        // プレイヤーを非アクティブ化
         this.gameObject.SetActive(false);
     }
 
     /// <summary>
-    /// 死亡時にオブジェクトを飛ばす処理
+    /// 血しぶきエフェクトを生成してランダムに飛ばす処理
     /// </summary>
     private void GenetateBlood()
     {
-        GameObject generatedBlood = default;    //生成後のオブジェクトを格納する変数
+        GameObject generatedBlood = default; // 生成したオブジェクトを一時的に格納
 
-        //オブジェクトを生成する
         for (int i = 0; i < MAX_GENERATE_OBJECTS; i++)
         {
-            //プレイヤーのポジションを格納
+            // プレイヤーの現在位置を取得
             _playerPosition = transform.position;
 
-            //オブジェクトを生成
+            // 血しぶきオブジェクトを生成
             generatedBlood = Instantiate(_blood, _playerPosition, Quaternion.identity);
             Rigidbody2D bloodrig2D = generatedBlood.GetComponent<Rigidbody2D>();
 
-            //飛ばす方向をランダムに決める
+            // ランダムな方向を決定
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
 
-            //飛ばすスピードをランダムに決める
+            // ランダムなスピードを決定
             float randomSpeed = Random.Range(MIN_FORCE, MAX_FORCE);
 
-            //ランダムに決めた値を使ってオブジェクトを飛ばす
+            // ランダムな方向と速度で飛ばす
             bloodrig2D.AddForce(randomDirection * randomSpeed, ForceMode2D.Impulse);
         }
     }

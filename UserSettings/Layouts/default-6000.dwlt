@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79
+    y: 24
     width: 706
     height: 440
   m_SerializedDataModeController:
@@ -431,7 +431,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 545
+    y: 490
     width: 706
     height: 441
   m_SerializedDataModeController:
@@ -1060,7 +1060,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: 2.3881462, y: -3.6743345, z: -0.95806175}
     speed: 2
-    m_Value: {x: -0.008903743, y: 0.012643028, z: 0}
+    m_Value: {x: 2.3881462, y: -3.6743345, z: -0.95806175}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 2.6992033
     speed: 2
-    m_Value: 0.32479215
+    m_Value: 2.6992033
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1292,8 +1292,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 707
-    y: 79
+    x: 708
+    y: 24
     width: 343
     height: 907
   m_SerializedDataModeController:
@@ -1358,8 +1358,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1052
-    y: 79
+    x: 1053
+    y: 24
     width: 391
     height: 907
   m_SerializedDataModeController:
@@ -1404,7 +1404,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 50b40000
     m_LastClickedID: 46160
-    m_ExpandedIDs: 000000008ab3000000ca9a3bffffff7f
+    m_ExpandedIDs: 00000000bab30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1433,7 +1433,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000008ab30000
+    m_ExpandedIDs: 00000000bab30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1548,8 +1548,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1445
-    y: 79
+    x: 1446
+    y: 24
     width: 474
     height: 907
   m_SerializedDataModeController:
